@@ -20,15 +20,15 @@ Kubernetes Steps and comands:
 2. Specify the pod name, and containers
 3. Each container should have container name, and image location
 
-Sample pod-config.yaml:
-apiVersion: v1
-kind: Pod
-metadata:
+Sample pod-config.yaml:<br/>
+apiVersion: v1<br/>
+kind: Pod<br/>
+metadata:<br/>
   name: webapp
-spec: 
-  containers:
-  - name: dummyapp
-    image: richardchesterwood/k8s-fleetman-webapp-angular:release0
+spec: <br/>
+  containers:<br/>
+  - name: dummyapp<br/>
+    image: richardchesterwood/k8s-fleetman-webapp-angular:release0<br/>
 
 Kubectl Commands for deploying pod and checking statuses
 1. kubectl get all (gets all the clusters currently running)
