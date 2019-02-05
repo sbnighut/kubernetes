@@ -34,8 +34,7 @@ Kubectl Commands for deploying pod and checking statuses
 1. kubectl get all (gets all the clusters currently running)
 2. kubectl apply -f first-pod.yaml (use the config file to deploy the pod)
 3. kubectl describe pod pod_name (describes all the status and info about the deployed pod)
-4. kubectl exec pod_name ls (Note: We cannot visit the pod through browser, but we can connect to the pod. The mentioned command executes the “ls” command on the pod’s container)
-5. kubectl -t exec pod_name sh  (We can infer the shell inside pod’s container and then trigger that shell command from browser. “It” means Get interactive with teletype emulation)
-6.  wget http://localhost:80 (We are now inside the container’s shell. We can execute any command in that shell. The mentioned command does an http get on the local url and saves that index.html file in the directory, which is root by default)
+4. kubectl -it exec pod_name sh  (Note: We cannot visit the pod through browser, but we can connect to the pod. The mentioned command executes the “ls” command on the pod’s container. We can infer the shell inside pod’s container and then trigger that shell command from browser. “It” means Get interactive with teletype emulation)
+5. wget http://localhost:80 (We are now inside the container’s shell. We can execute any command in that shell. The mentioned command does an http get on the local url and saves that index.html file in the directory, which is root by default)
 
 
