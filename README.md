@@ -21,14 +21,16 @@ This repository contains projects along with the kubernetes configuration for ru
 3. Each container should have container name, and image location
 
 Sample pod-config.yaml:
+```
 apiVersion: v1
 kind: Pod
 metadata:
   name: webapp
-spec: 
+spec:
   containers:
   - name: dummyapp
     image: richardchesterwood/k8s-fleetman-webapp-angular:release0
+```
 
 **Kubectl Commands for deploying pod and checking statuses**
 1. kubectl get all (gets all the clusters currently running)
