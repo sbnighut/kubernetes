@@ -1,0 +1,45 @@
+apiVersion: v1
+kind: Service
+metadata:
+  # Unique key of the service instance
+  name: angular-webapp
+spec:
+  selector:
+    # It defines which pods are going to be selected or considered
+    # by this service
+    # Select all the pods with value "webapp" for the label "app"
+    app: webapp
+    # We can directly point to the replica set and 
+    # replicaset will hold the release specific containers
+    # release: "0-5" 
+   
+  ports:
+    - name: http
+      port: 80 # This service is going to talk to port 80 of pods belonging to replica set
+      nodePort: 30080 #node port has a constraint to be >30000
+      
+    # type: LoadBalancer for load balancer
+    # type: ClusterIP # if the service is only internally accessible
+  type: NodePort # this means we are going to expose the port through the node, to the external world
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  # Unique key of the service instance
+  name: queue
+spec:
+  selector:
+    # It defines which pods are going to be selected or considered
+    # by this service
+    # Select all the pods with value "webapp" for the labe "mylabelname"
+    app: queue
+  ports:
+    - name: http
+      port: 8161 # This service is going to talk to port 8161 of pods
+      nodePort: 30010 #node port has a constraint to be >30000
+      
+    # type: LoadBalancer for load balancer
+    # type: ClusterIP # if the service is only internally accessible
+  type: NodePort # this means we are going to expose the port through the node, to the external world
