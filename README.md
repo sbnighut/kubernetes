@@ -111,6 +111,7 @@ export NAME=sbnighut.k8s.local
 export KOPS_STATE_STORE=s3://sbnighut-state-storage
 
 **—————*————————————*——————————————*————————*————————**
+
 **Ignore: Vehicle Tracker app related setup instructions**
 If we want to deploy a new container locally with updated release version of code now
 1. Update pod’s yaml configuration. Insert a ‘’’ string for creating additional pods definitions.
