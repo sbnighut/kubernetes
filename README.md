@@ -64,3 +64,86 @@ spec:
 1. kubectl apply -f webapp-service.yaml (this will create a kubernete service that will expose our internal *webapp pods* through port 30080, to the outside world)
 
   In order to access this pod from outside world we have to hit the url [minicube ip]:[service port] i.e. http://192.168.99.101:30080/. The selector rules will identify the pods and route to those pods.
+
+**—————*————————————*——————————————*————————*————————**
+
+**AWS Deployment related instruction:**
+Create a bootstrap EC2 instance: This node is a physical server in the infrastructure
+Master Node: Responsible for deciding which node should each pods be running on
+
+1. Create an EC2 instance
+2. Download the pem file containing private key
+3. chmod 600 video-keypair (Change permission of this file to allow only rw for current user)
+4. Run it on AWS
+5. ssh -i video-keypair.pem ec2-user@3.17.140.224 (ssh to the EC2 server using)
+6. Once you are inside the EC2 instance, install the kops tool for managing kubernetes cluster. Basically kops tool acts as “kubectl” for AWS
+
+EC2 instance:
+export NAME=sbnighut.k8s.local
+export KOPS_STATE_STORE=s3://sbnighut-state-storage
+
+kops create cluster --zones us-east-2a,us-east-2b,us-east-2c --name ${NAME}
+kops create secret sshpublickey admin -i ~/.ssh/id_rsa.pub --name ${NAME}
+kops edit ig nodes --name ${NAME}
+kops update cluster ${NAME} --yes
+Kops validate cluster
+
+Delete cluster:
+kops delete cluster --name ${NAME} --yes
+
+Launch the k8s cluster:
+Creating , editing , updating, applying yaml files
+
+Bootstrap instance: ssh commands: 
+export AWS_ACCESS_KEY_ID=$(aws configure get aws_access_key_id)
+export AWS_SECRET_ACCESS_KEY=$(aws configure get aws_secret_access_key)
+export NAME=myfirstcluster.example.com
+export KOPS_STATE_STORE=s3://prefix-example-com-state-store
+export NAME=sbnighut.apps.com
+export KOPS_STATE_STORE=s3://sbnighut-state-storage
+export NAME=sbnighut.k8s.local
+export NAME=sbnighut.apps.com
+export KOPS_STATE_STORE=s3://sbnighut-state-storage
+export NAME=sbnighut.k8s.local
+export NAME=sbnighut.k8s.local
+export KOPS_STATE_STORE=s3://sbnighut-state-storage
+export NAME=sbnighut.k8s.local
+export KOPS_STATE_STORE=s3://sbnighut-state-storage
+
+**—————*————————————*——————————————*————————*————————**
+**Ignore: Vehicle Tracker app related setup instructions**
+If we want to deploy a new container locally with updated release version of code now
+1. Update pod’s yaml configuration. Insert a ‘’’ string for creating additional pods definitions.
+2. Update the kubernetes service to start the new released version of container 
+3. Apply this pod file to kubectl and we will have two pods running simultaneously (Note: label value has to be string)
+4. kubectl get pods --show-labels -l release=0 (It displays all the pods with specified label)
+5. kubectl describe service angular-webapp (it shows which pods are the service connected to)
+
+Uptil now we were responsible for managing the lifecycle of pods. Here onwards we will make replica sets of pods. We will maintain extra set of configurations for managing these replicas.
+
+Replicaste yaml file that describes pods in a pod definition. And defines how many pods at minimum we want to maintain all the time.
+
+Rollback deployment:
+kubectl rollout status deploy webapp  (webapp is the deployment name)
+kubectl rollout status status deplopy webapp (displays all the revisions did so far with the deployments)
+kubectl rollout undo deploy webapp --to-revision=2 (will roll back the deployment the deployment to the specific version)
+
+Segreggate resources into namespaces
+How service discovery works:
+Default namespace is “default”
+Kubectl get ns (fetches all the namespaces)
+kubectl get pods -n “namespace_name” (lists all the pods running under that namespace) 
+
+Every kubernete cluster has a coredns service running that resolves name (service names to be precise) to ip addresses inside the cluster
+kubectl exec -it webapp-6cc9cc96db-5vw44 sh (ssh into a random pod)
+Nslookup service_name (This will call the coredns service for resolving IP of service_name)
+
+Now install mysql client on the webapp node
+apk add mysql-client
+mysql -h database -uroot -ppassword fleetman (verify that the connection can be made to the mysql db server running on the database pod)
+
+Inspect pods:
+First do describe 
+kubectl logs pod_name
+
+Default Credentials for doing ssh into Minikube: (username: docker, password: tucker)
